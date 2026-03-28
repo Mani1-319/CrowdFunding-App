@@ -9,11 +9,12 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-const clientOrigin = process.env.CLIENT_ORIGIN;
+// ✅ FIXED Socket.io CORS
 const io = new Server(server, {
   cors: {
-    origin: clientOrigin || true,
+    origin: "https://crowdfunding-ap.netlify.app",
     methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
 
@@ -30,11 +31,12 @@ if (isProd) {
   app.set('trust proxy', 1);
 }
 
-// Middleware
+// ✅ CORS for API
 app.use(cors({
   origin: "https://crowdfunding-ap.netlify.app",
   credentials: true
 }));
+
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -53,15 +55,14 @@ app.use('/api', (req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-// ❌ REMOVED frontend serving block (THIS FIXES YOUR ERROR)
-
+// Dev route only
 if (!isProd) {
   app.get('/', (req, res) => {
     res.send('Donation Platform API is running');
   });
 }
 
-// Socket.io for Real-time Updates
+// Socket.io
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
 
@@ -70,7 +71,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// Make io accessible to routers
+// Make io accessible
 app.set('socketio', io);
 
 const PORT = process.env.PORT || 5000;
