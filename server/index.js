@@ -31,13 +31,10 @@ if (isProd) {
 }
 
 // Middleware
-app.use(
-  cors(
-    clientOrigin
-      ? { origin: clientOrigin, credentials: true }
-      : {}
-  )
-);
+app.use(cors({
+  origin: "https://crowdfunding-ap.netlify.app",
+  credentials: true
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

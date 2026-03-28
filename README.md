@@ -49,7 +49,7 @@ Follow these step-by-step instructions to run the application locally.
    # or
    node index.js
    ```
-   *The server will run on `http://localhost:5000`.*
+   *The server will run on `https://crowdfunding-app-0onj.onrender.com`.*
 
 ### 3. Frontend Setup
 
