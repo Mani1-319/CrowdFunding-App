@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #f8fafc;
+  --color-primary-100: #f1f5f9;
+  --color-primary-500: #475569;
+  --color-primary-600: #334155;
+  --color-primary-700: #1e293b;
+}
+
+@layer base {
+  html {
+    @apply min-h-full;
+  }
+  body {
+    @apply min-h-screen text-slate-900 font-sans antialiased;
+    background-color: #f1f5f9;
+    background-image:
+      radial-gradient(ellipse 130% 90% at 50% -18%, rgba(30, 58, 138, 0.14), transparent 56%),
+      radial-gradient(circle at 82% 48%, rgba(15, 23, 42, 0.09), transparent 52%),
+      radial-gradient(circle at 10% 78%, rgba(51, 65, 85, 0.11), transparent 48%),
+      linear-gradient(165deg, rgb(248 250 252) 0%, rgb(226 232 240) 45%, rgb(241 245 249) 100%);
+    background-attachment: fixed;
+  }
+}

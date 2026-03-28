@@ -1,0 +1,13 @@
+# Render Blueprint — link a PostgreSQL instance and set env vars in the dashboard.
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: donte-web
+    runtime: node
+    plan: free
+    buildCommand: npm install --prefix server && npm install --prefix client && npm run build --prefix client
+    startCommand: NODE_ENV=production node server/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+# Add DATABASE_URL, JWT_SECRET, etc. in the Render dashboard (or link a Postgres resource).
