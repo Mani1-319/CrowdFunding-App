@@ -30,7 +30,7 @@ if (isProd) {
   app.set('trust proxy', 1);
 }
 
-// Middleware — set CLIENT_ORIGIN in production if the API is on a different host than the SPA
+// Middleware
 app.use(
   cors(
     clientOrigin
@@ -56,18 +56,9 @@ app.use('/api', (req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-if (isProd) {
-  const clientDist = path.join(__dirname, '..', 'client', 'dist');
-  const indexHtml = path.join(clientDist, 'index.html');
-  app.use(express.static(clientDist));
-  app.use((req, res, next) => {
-    if (req.method !== 'GET' && req.method !== 'HEAD') return next();
-    if (req.path.startsWith('/uploads')) {
-      return res.status(404).send('Not found');
-    }
-    res.sendFile(indexHtml);
-  });
-} else {
+// ❌ REMOVED frontend serving block (THIS FIXES YOUR ERROR)
+
+if (!isProd) {
   app.get('/', (req, res) => {
     res.send('Donation Platform API is running');
   });
