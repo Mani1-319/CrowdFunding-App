@@ -1,11 +1,8 @@
 import axios from 'axios';
-
-const baseURL =
-  import.meta.env.VITE_API_URL ||
-  'https://crowdfunding-app-0onj.onrender.com/api';
+import { getApiBaseUrl } from './env';
 
 const api = axios.create({
-  baseURL,
+  baseURL: getApiBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },

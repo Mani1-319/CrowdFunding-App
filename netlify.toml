@@ -1,0 +1,13 @@
+# Build the Vite app from the repo root. Set env vars in Netlify UI (VITE_* are baked in at build time).
+[build]
+  command = "npm ci --prefix client && npm run build --prefix client"
+  publish = "client/dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# React Router (SPA)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

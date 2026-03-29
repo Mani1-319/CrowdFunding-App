@@ -1,4 +1,5 @@
-# Render Blueprint — link a PostgreSQL instance and set env vars in the dashboard.
+# Render Blueprint — use Neon for Postgres (DATABASE_URL in dashboard).
+# Also set CLIENT_ORIGIN to your Netlify URL (https, no slash), plus JWT_SECRET, SMTP_*, RAZORPAY_*, etc.
 # https://render.com/docs/blueprint-spec
 services:
   - type: web
@@ -10,4 +11,3 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-# Add DATABASE_URL, JWT_SECRET, etc. in the Render dashboard (or link a Postgres resource).

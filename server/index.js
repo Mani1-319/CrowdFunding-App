@@ -3,21 +3,27 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const { Server } = require('socket.io');
 const http = require('http');
+const { parseAllowedOrigins, corsOriginCallback } = require('./utils/corsConfig');
 
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
 
-// ✅ FIXED Socket.io CORS
+// 🔹 CORS setup
+const allowedOrigins = parseAllowedOrigins();
+const corsOrigin = corsOriginCallback(allowedOrigins);
+
+// 🔹 Socket.io
 const io = new Server(server, {
   cors: {
-    origin: "https://crowdfunding-ap.netlify.app",
+    origin: corsOrigin,
     methods: ['GET', 'POST'],
     credentials: true,
   },
 });
 
+// 🔹 Routes
 const authRoutes = require('./routes/authRoutes');
 const campaignRoutes = require('./routes/campaignRoutes');
 const donationRoutes = require('./routes/donationRoutes');
@@ -31,38 +37,48 @@ if (isProd) {
   app.set('trust proxy', 1);
 }
 
-// ✅ CORS for API
-app.use(cors({
-  origin: "https://crowdfunding-ap.netlify.app",
-  credentials: true
-}));
+// 🔹 Middlewares
+app.use(
+  cors({
+    origin: corsOrigin,
+    credentials: true,
+  })
+);
 
 app.use(express.json());
+
+// 🔥 DEBUG middleware (IMPORTANT)
+app.use((req, res, next) => {
+  console.log(`➡️ ${req.method} ${req.url}`);
+  console.log('BODY:', req.body);
+  next();
+});
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes
+// 🔹 API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/campaigns', campaignRoutes);
 app.use('/api/donations', donationRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/admin', adminRoutes);
 
+// 🔹 Health check
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, env: process.env.NODE_ENV || 'development' });
 });
 
+// 🔹 Root route (FIXED — now works in production too)
+app.get('/', (req, res) => {
+  res.send('API is running ✅');
+});
+
+// 🔹 404 handler
 app.use('/api', (req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-// Dev route only
-if (!isProd) {
-  app.get('/', (req, res) => {
-    res.send('Donation Platform API is running');
-  });
-}
-
-// Socket.io
+// 🔹 Socket.io
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
 
@@ -71,7 +87,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// Make io accessible
 app.set('socketio', io);
 
 const PORT = process.env.PORT || 5000;

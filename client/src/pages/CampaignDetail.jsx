@@ -6,6 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import ShareMenu from '../components/ShareMenu';
 import { publicAssetUrl } from '../utils/publicUrl';
+import { getSocketOrigin } from '../utils/env';
 import { formatInr, formatInrWhole } from '../utils/formatCurrency';
 
 const CampaignDetail = () => {
@@ -47,10 +48,11 @@ const CampaignDetail = () => {
 
     fetchAllData();
 
-    const socketUrl =
-      import.meta.env.VITE_SOCKET_URL ||
-      (import.meta.env.DEV ? 'https://crowdfunding-app-0onj.onrender.com' : undefined);
-    const socket = socketUrl ? io(socketUrl) : io();
+    const socketUrl = getSocketOrigin();
+    if (!socketUrl) {
+      return undefined;
+    }
+    const socket = io(socketUrl, { transports: ['websocket', 'polling'] });
     socket.on('campaign_update', (data) => {
       if (Number(data.campaignId) === Number(id)) {
         setCampaign((prev) =>
