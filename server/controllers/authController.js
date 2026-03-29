@@ -55,13 +55,16 @@ const loginUser = async (req, res) => {
 
     const result = await db.query("SELECT * FROM users WHERE email=$1", [email]);
 
-    console.log("DB RESULT:", result.rows);
-
     if (result.rows.length === 0) {
       return res.status(400).json({ message: "User not found" });
     }
 
     const user = result.rows[0];
+
+    // 🔥 SAFE PASSWORD CHECK
+    if (!user.password_hash) {
+      return res.status(500).json({ message: "Password not set in DB" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
 
@@ -69,7 +72,11 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid password" });
     }
 
-    const token = generateToken(user.id, user.role || "user");
+    const token = jwt.sign(
+      { id: user.id, role: user.role || "user" },
+      process.env.JWT_SECRET || "secret123",
+      { expiresIn: "1d" }
+    );
 
     res.json({
       message: "Login success",
@@ -77,13 +84,13 @@ const loginUser = async (req, res) => {
       user: {
         id: user.id,
         name: user.name,
-        email: user.email
-      }
+        email: user.email,
+      },
     });
 
   } catch (err) {
     console.error("LOGIN ERROR:", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
