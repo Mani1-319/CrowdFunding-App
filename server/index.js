@@ -47,7 +47,7 @@ app.use(
 
 app.use(express.json());
 
-// 🔥 DEBUG middleware (IMPORTANT)
+// 🔥 DEBUG middleware
 app.use((req, res, next) => {
   console.log(`➡️ ${req.method} ${req.url}`);
   console.log('BODY:', req.body);
@@ -63,19 +63,28 @@ app.use('/api/donations', donationRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/admin', adminRoutes);
 
-// 🔹 Health check
+// 🔹 Health
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, env: process.env.NODE_ENV || 'development' });
 });
 
-// 🔹 Root route (FIXED — now works in production too)
+// 🔹 Root
 app.get('/', (req, res) => {
   res.send('API is running ✅');
 });
 
-// 🔹 404 handler
+// 🔹 404
 app.use('/api', (req, res) => {
   res.status(404).json({ message: 'Not found' });
+});
+
+// 🔥 GLOBAL ERROR HANDLER (CRITICAL)
+app.use((err, req, res, next) => {
+  console.error('🔥 GLOBAL ERROR:', err);
+  res.status(500).json({
+    message: err.message,
+    stack: err.stack,
+  });
 });
 
 // 🔹 Socket.io
