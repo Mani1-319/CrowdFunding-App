@@ -3,23 +3,17 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const { Server } = require('socket.io');
 const http = require('http');
-const { parseAllowedOrigins, corsOriginCallback } = require('./utils/corsConfig');
 
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
 
-// 🔹 CORS setup
-const allowedOrigins = parseAllowedOrigins();
-const corsOrigin = corsOriginCallback(allowedOrigins);
-
-// 🔹 Socket.io
+// 🔹 Socket.io (FIXED CORS)
 const io = new Server(server, {
   cors: {
-    origin: corsOrigin,
+    origin: "*",
     methods: ['GET', 'POST'],
-    credentials: true,
   },
 });
 
@@ -37,13 +31,11 @@ if (isProd) {
   app.set('trust proxy', 1);
 }
 
-// 🔹 Middlewares
-app.use(
-  cors({
-    origin: corsOrigin,
-    credentials: true,
-  })
-);
+// 🔹 Middlewares (FIXED CORS)
+app.use(cors({
+  origin: "*",
+  credentials: true,
+}));
 
 app.use(express.json());
 
@@ -78,7 +70,7 @@ app.use('/api', (req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-// 🔥 GLOBAL ERROR HANDLER (CRITICAL)
+// 🔥 GLOBAL ERROR HANDLER
 app.use((err, req, res, next) => {
   console.error('🔥 GLOBAL ERROR:', err);
   res.status(500).json({
