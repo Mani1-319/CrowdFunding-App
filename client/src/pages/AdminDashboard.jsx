@@ -56,6 +56,28 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleSuspendUser = async (id, name, isSuspended) => {
+    try {
+      await api.put(`/admin/users/${id}/suspend`);
+      toast.success(`User ${name || 'ID '+id} ${isSuspended ? 'unsuspended' : 'suspended'}`);
+      fetchAdminData();
+    } catch (err) {
+      toast.error('Failed to suspend/unsuspend user');
+    }
+  };
+
+  const handleDeleteUser = async (id, name) => {
+    if (!window.confirm(`Are you sure you want to permanently delete user ${name || 'ID '+id}? This eliminates all their campaigns and donations.`)) return;
+    try {
+      await api.delete(`/admin/users/${id}`);
+      toast.success('User permanently deleted');
+      setUsers(users.filter(u => u.id !== id));
+      fetchAdminData();
+    } catch (err) {
+      toast.error('Failed to delete user');
+    }
+  };
+
   const handleApprove = async (id, title) => {
     try {
       await api.put('/campaigns/' + id + '/approve');
@@ -187,13 +209,14 @@ const AdminDashboard = () => {
                   <th className="p-4 font-medium border-y border-slate-200/40">Email</th>
                   <th className="p-4 font-medium border-y border-slate-200/40">Password</th>
                   <th className="p-4 font-medium border-y border-slate-200/40">Status</th>
+                  <th className="p-4 font-medium border-y border-slate-200/40 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {loadingMeta ? (
-                  <tr><td colSpan="4" className="p-6 text-gray-500">Loading…</td></tr>
+                  <tr><td colSpan="5" className="p-6 text-gray-500">Loading…</td></tr>
                 ) : users.length === 0 ? (
-                  <tr><td colSpan="4" className="p-6 text-gray-500">No users found.</td></tr>
+                  <tr><td colSpan="5" className="p-6 text-gray-500">No users found.</td></tr>
                 ) : (
                   users.map(u => (
                     <tr key={u.id} className="hover:bg-gray-50/50 transition-colors">
@@ -201,9 +224,27 @@ const AdminDashboard = () => {
                       <td className="p-4 text-sm text-gray-700 font-mono">{u.email}</td>
                       <td className="p-4 text-sm text-gray-400 tracking-widest font-mono">••••••••</td>
                       <td className="p-4 text-sm">
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${u.is_active ? 'bg-slate-50 text-slate-700' : 'bg-amber-50 text-amber-700'}`}>
-                          {u.is_active ? 'Active' : 'Pending'}
-                        </span>
+                        {u.is_suspended ? (
+                          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">Suspended</span>
+                        ) : (
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${u.is_active ? 'bg-slate-50 text-slate-700' : 'bg-amber-50 text-amber-700'}`}>
+                            {u.is_active ? 'Active' : 'Pending'}
+                          </span>
+                        )}
+                      </td>
+                      <td className="p-4 text-right flex justify-end gap-2">
+                        <button 
+                          onClick={() => handleSuspendUser(u.id, u.name, u.is_suspended)}
+                          className="px-3 py-1.5 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors"
+                        >
+                          {u.is_suspended ? 'Unsuspend' : 'Suspend'}
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteUser(u.id, u.name)}
+                          className="px-3 py-1.5 text-sm font-medium text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors"
+                        >
+                          Remove
+                        </button>
                       </td>
                     </tr>
                   ))

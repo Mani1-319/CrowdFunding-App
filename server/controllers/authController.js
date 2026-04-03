@@ -85,6 +85,10 @@ const loginUser = async (req, res) => {
 
     const user = result.rows[0];
 
+    if (user.is_suspended) {
+      return res.status(403).json({ message: "Your account has been suspended for violating platform policies." });
+    }
+
     if (!user.password_hash) {
       return res.status(500).json({ message: "password_hash missing in DB" });
     }
