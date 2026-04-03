@@ -1,56 +1,55 @@
-const nodemailer = require('nodemailer');
+const fetch = require('node-fetch'); // or native fetch if Node 18+
 require('dotenv').config();
-
-function smtpPassNormalized() {
-  return (process.env.SMTP_PASS || '').replace(/\s/g, '');
-}
-
-function isRealSmtpConfigured() {
-  return (
-    process.env.SMTP_HOST &&
-    process.env.SMTP_PORT &&
-    process.env.SMTP_USER &&
-    smtpPassNormalized()
-  );
-}
 
 const sendEmail = async (to, subject, html) => {
   try {
-    if (!isRealSmtpConfigured()) {
+    const apiKey = process.env.BREVO_API_KEY;
+    
+    if (!apiKey) {
       return {
         ok: false,
-        error: "SMTP not configured properly in Render environment variables",
+        error: "BREVO_API_KEY is not configured in environment variables",
       };
     }
 
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
-      secure: Number(process.env.SMTP_PORT) === 465, // true for 465, false for 587
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: smtpPassNormalized(),
+    // Use native fetch (Node 18+) or install node-fetch if on older versions
+    // By default, modern Node has global 'fetch'
+    const response = await globalThis.fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'api-key': apiKey
       },
-      connectionTimeout: 8000, // 8 seconds max connect time
-      greetingTimeout: 8000,
-      socketTimeout: 8000,
+      body: JSON.stringify({
+        sender: { 
+          name: "Donte Platform", 
+          email: process.env.SMTP_USER || "noreply@donte.com" 
+        },
+        to: [{ email: to }],
+        subject: subject,
+        htmlContent: html
+      })
     });
 
-    const info = await transporter.sendMail({
-      from: `"Donation Platform" <${process.env.SMTP_USER}>`,
-      to,
-      subject,
-      html,
-    });
+    const data = await response.json().catch(() => ({}));
 
-    console.log("EMAIL SENT:", info.messageId);
+    if (!response.ok) {
+      console.error("BREVO API ERROR:", data);
+      return {
+        ok: false,
+        error: data.message || `HTTP Error ${response.status}`,
+      };
+    }
+
+    console.log("EMAIL SENT VIA BREVO Web API:", data.messageId);
 
     return {
       ok: true,
-      messageId: info.messageId,
+      messageId: data.messageId,
     };
   } catch (error) {
-    console.error("EMAIL ERROR:", error.message);
+    console.error("EMAIL CRITICAL ERROR:", error.message);
     return {
       ok: false,
       error: error.message,
