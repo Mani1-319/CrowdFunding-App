@@ -45,7 +45,7 @@ const AdminLogin = () => {
               type="email"
               required
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-slate-500 focus:border-slate-600 transition-all text-gray-900"
-              placeholder="adminsrinath@donte.com"
+              placeholder="admin@donte.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
