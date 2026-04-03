@@ -94,6 +94,14 @@ const ShareMenu = ({ url: urlProp, title = 'Campaign' }) => {
         ),
     },
     {
+      id: 'sms',
+      label: 'Messages',
+      color: 'bg-green-500 hover:bg-green-600',
+      onClick: () => {
+        openWindow(`sms:?&body=${encText}`);
+      },
+    },
+    {
       id: 'email',
       label: 'Email',
       color: 'bg-slate-600 hover:bg-slate-700',
