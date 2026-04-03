@@ -29,7 +29,7 @@ const Register = () => {
     } else {
       toast.error(res.data.message || 'Could not send verification code.');
       if (res.data.emailError) {
-        toast.error(String(res.data.emailError).slice(0, 120), { duration: 8000 });
+        toast.error(`SMTP Error: ${String(res.data.emailError).slice(0, 120)}`, { duration: 10000 });
       }
       if (res.data.smsError) {
         toast.error(String(res.data.smsError).slice(0, 140), { duration: 10000 });
