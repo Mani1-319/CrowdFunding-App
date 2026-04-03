@@ -15,14 +15,6 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Create admin seeder dynamically
-      if (email === 'adminsrinath@donte.com' && password === 'Mani@1319') {
-        try {
-          // Pre-emptively send a quick init call just in case admin doesn't exist
-          await api.post('/auth/init-admin', { email, password });
-        } catch(e) { /* Ignore if it already exists or route is missing */ }
-      }
-
       const res = await api.post('/auth/admin/login', { email, password });
       login(res.data.admin, res.data.token);
       toast.success('Admin login successful!');
@@ -79,7 +71,6 @@ const AdminLogin = () => {
               {loading ? 'Authenticating...' : 'Secure Login'}
             </button>
           </div>
-          <p className="text-center text-xs text-gray-400 mt-4">Demo Credentials: adminsrinath@donte.com / Mani@1319</p>
         </form>
       </div>
     </div>
