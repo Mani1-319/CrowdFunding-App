@@ -12,7 +12,7 @@ const optionalAuth = (req, res, next) => {
   if (token) {
     const jwt = require('jsonwebtoken');
     try {
-      req.user = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
+      req.user = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET || "secret123");
     } catch(e) {}
   }
   next();

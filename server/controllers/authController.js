@@ -176,8 +176,73 @@ const initAdmin = async (req, res) => {
   }
 };
 const getMe = async (req, res) => res.json({ message: "GetMe temp" });
-const forgotPassword = async (req, res) => res.json({ message: "Forgot temp" });
-const resetPassword = async (req, res) => res.json({ message: "Reset temp" });
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "Email is required" });
+
+    const result = await db.query("SELECT * FROM users WHERE email=$1", [email]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "User not found with this email" });
+    }
+
+    let otp = crypto.randomInt(100000, 999999).toString();
+    const otp_expires_at = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+
+    await db.query("UPDATE users SET otp=$1, otp_expires_at=$2 WHERE email=$3", [otp, otp_expires_at, email]);
+
+    const mailRes = await sendEmail(
+      email,
+      "Donte Password Reset",
+      `Your password reset code is: <b>${otp}</b>. It expires in 10 minutes.`
+    );
+
+    if (mailRes.ok) {
+      res.json({ emailSent: true, message: "Reset code sent to your email" });
+    } else {
+      res.json({ 
+        emailSent: false, 
+        message: "Email disabled or failed. Demo mode active.",
+        emailError: mailRes.error,
+        otp_demo: otp // Included for demo testing 
+      });
+    }
+  } catch (err) {
+    console.error("Forgot error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    if (!email || !otp || !newPassword) return res.status(400).json({ message: "All fields are required" });
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
+
+    const result = await db.query("SELECT * FROM users WHERE email=$1", [email]);
+    if (result.rows.length === 0) return res.status(404).json({ message: "User not found" });
+
+    const user = result.rows[0];
+
+    if (user.otp !== String(otp) || new Date() > new Date(user.otp_expires_at)) {
+      return res.status(400).json({ message: "Invalid or expired reset code" });
+    }
+
+    const bcrypt = require("bcrypt");
+    const salt = await bcrypt.genSalt(10);
+    const password_hash = await bcrypt.hash(newPassword, salt);
+
+    await db.query("UPDATE users SET password_hash=$1, otp=NULL, otp_expires_at=NULL WHERE email=$2", [password_hash, email]);
+
+    res.json({ message: "Password updated successfully! You can now log in." });
+  } catch (err) {
+    console.error("Reset error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 const registerPhone = async (req, res) => res.json({ message: "Phone reg temp" });
 const verifyPhoneSignup = async (req, res) => res.json({ message: "Verify phone temp" });
 const sendPhoneLoginOtp = async (req, res) => res.json({ message: "Send OTP temp" });
