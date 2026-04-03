@@ -4,7 +4,10 @@ const { sendEmail } = require('../utils/emailService');
 const createCampaign = async (req, res) => {
   const { title, description, goal_amount, deadline } = req.body;
   const user_id = req.user.id;
-  const image_url = req.file ? `/uploads/${req.file.filename}` : null;
+  
+  const image_url = req.files && req.files.length > 0 
+    ? req.files.map(file => `/uploads/${file.filename}`).join(',') 
+    : null;
 
   try {
     const newCampaign = await db.query(

@@ -19,10 +19,33 @@ import Help from './pages/Help';
 import AdminLogin from './pages/AdminLogin';
 import Welcome from './pages/Welcome';
 
+import { useNavigate, useLocation } from 'react-router-dom';
+
+const AppInitializer = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  React.useEffect(() => {
+    // This runs once when the app actually hard-mounts (first visit or a browser refresh)
+    const hasJustReloaded = sessionStorage.getItem('just_reloaded');
+    
+    // Clear the launch flag so the animation plays again
+    sessionStorage.removeItem('donte_launch_seen');
+
+    // Force navigation back to the launch screen
+    if (location.pathname !== '/') {
+      navigate('/');
+    }
+  }, []);
+
+  return null;
+};
+
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <AppInitializer />
         <Toaster
           position="top-right"
           toastOptions={{

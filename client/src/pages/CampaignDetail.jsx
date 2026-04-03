@@ -222,11 +222,16 @@ const CampaignDetail = () => {
         <div className="lg:w-2/3 space-y-8">
           <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200/50">
             {campaign.image_url ? (
-              <img 
-                src={publicAssetUrl(campaign.image_url)} 
-                alt={campaign.title} 
-                className="w-full h-96 object-cover"
-              />
+              <div className="flex overflow-x-auto gap-2 snap-x snap-mandatory">
+                {campaign.image_url.split(',').map((img, idx) => (
+                  <img 
+                    key={idx}
+                    src={publicAssetUrl(img)} 
+                    alt={`${campaign.title} - ${idx + 1}`} 
+                    className="w-full flex-shrink-0 h-96 object-cover snap-center"
+                  />
+                ))}
+              </div>
             ) : (
               <div className="w-full h-96 bg-gradient-to-br from-slate-100 to-blue-100 flex items-center justify-center">
                 <span className="text-slate-400 font-bold text-4xl">Donte</span>

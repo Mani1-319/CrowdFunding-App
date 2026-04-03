@@ -14,7 +14,7 @@ router.get('/', getCampaigns);
 router.get('/:id', getCampaignById);
 
 // Protected routes (User)
-router.post('/', authMiddleware, upload.single('image'), createCampaign);
+router.post('/', authMiddleware, upload.array('images', 5), createCampaign);
 router.put('/:id', authMiddleware, updateCampaign);
 router.delete('/:id', authMiddleware, deleteCampaign);
 router.post('/:id/end', authMiddleware, endCampaign);

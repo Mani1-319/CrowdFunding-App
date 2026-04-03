@@ -122,6 +122,10 @@ const Login = () => {
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-100/70 rounded-full blur-3xl -ml-10 -mb-10" />
 
         <div className="relative z-10">
+          <Link to="/home" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors mb-6">
+            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to Home
+          </Link>
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 tracking-tight">
               Welcome back

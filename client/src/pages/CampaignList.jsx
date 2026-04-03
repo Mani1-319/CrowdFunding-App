@@ -1,16 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../utils/api';
 import { publicAssetUrl } from '../utils/publicUrl';
 import { formatInrWhole } from '../utils/formatCurrency';
+import { AuthContext } from '../context/AuthContext';
 
 const CampaignList = () => {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
     const fetchCampaigns = async () => {
       try {
         const res = await api.get('/campaigns');
@@ -22,7 +30,19 @@ const CampaignList = () => {
       }
     };
     fetchCampaigns();
-  }, []);
+  }, [user]);
+
+  if (!user) {
+    return (
+      <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-slate-200/50 max-w-2xl mx-auto my-10">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Authentication Required</h2>
+        <p className="text-gray-500 mb-8">You need to be logged in to explore campaigns.</p>
+        <button onClick={() => navigate('/login')} className="px-6 py-3 bg-slate-700 text-white rounded-full font-medium hover:bg-slate-800 transition">
+          Log in Now
+        </button>
+      </div>
+    );
+  }
 
   if (loading) return (
     <div className="flex justify-center items-center h-[50vh]">
@@ -65,7 +85,7 @@ const CampaignList = () => {
                     <div className="h-48 bg-gray-100 relative overflow-hidden">
                       {campaign.image_url ? (
                         <img 
-                          src={publicAssetUrl(campaign.image_url)} 
+                          src={publicAssetUrl(campaign.image_url.split(',')[0])} 
                           alt={campaign.title} 
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />

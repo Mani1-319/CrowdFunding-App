@@ -14,13 +14,13 @@ const CreateCampaign = () => {
     goal_amount: '',
     deadline: ''
   });
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // Redirect if not logged in
   if (!user) {
     return (
-      <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-slate-200/50 max-w-2xl mx-auto">
+      <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-slate-200/50 max-w-2xl mx-auto my-10">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Authentication Required</h2>
         <p className="text-gray-500 mb-8">You need to be logged in to start a campaign.</p>
         <button onClick={() => navigate('/login')} className="px-6 py-3 bg-slate-700 text-white rounded-full font-medium hover:bg-slate-800 transition">
@@ -31,7 +31,7 @@ const CreateCampaign = () => {
   }
 
   const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
+    setImages(Array.from(e.target.files));
   };
 
   const handleSubmit = async (e) => {
@@ -44,8 +44,11 @@ const CreateCampaign = () => {
       data.append('description', formData.description);
       data.append('goal_amount', formData.goal_amount);
       data.append('deadline', formData.deadline);
-      if (image) {
-        data.append('image', image);
+      
+      if (images && images.length > 0) {
+        images.forEach((file) => {
+          data.append('images', file);
+        });
       }
 
       const res = await api.post('/campaigns', data, {
@@ -65,7 +68,7 @@ const CreateCampaign = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto py-8 px-4">
       <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-slate-200/50">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Start a Campaign</h1>
         <p className="text-gray-500 mb-8">Fill out the details below to launch your fundraising campaign.</p>
@@ -121,7 +124,7 @@ const CreateCampaign = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Campaign Image</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Campaign Images (up to 5)</label>
             <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:border-slate-400 transition-colors bg-gray-50">
               <div className="space-y-1 text-center">
                 <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -129,13 +132,15 @@ const CreateCampaign = () => {
                 </svg>
                 <div className="flex text-sm text-gray-600 justify-center">
                   <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-slate-700 hover:text-slate-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-slate-500 px-1 pt-1">
-                    <span>Upload a file</span>
-                    <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept="image/*" />
+                    <span>Upload files</span>
+                    <input id="file-upload" name="file-upload" type="file" multiple className="sr-only" onChange={handleFileChange} accept="image/*" />
                   </label>
                   <p className="pl-1 pt-1">or drag and drop</p>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  {image ? image.name : 'PNG, JPG, WEBP up to 5MB'}
+                <p className="text-xs text-gray-500 mt-2 font-semibold">
+                  {images && images.length > 0 
+                    ? `${images.length} file(s) selected: ` + images.map(i => i.name).join(', ') 
+                    : 'PNG, JPG, WEBP up to 5MB (Multiple allowed)'}
                 </p>
               </div>
             </div>

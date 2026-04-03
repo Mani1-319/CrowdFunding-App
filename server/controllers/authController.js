@@ -97,15 +97,17 @@ const loginUser = async (req, res) => {
       return res.status(500).json({ message: "password_hash missing in DB" });
     }
 
-    const bcrypt = require("bcrypt");
     const isMatch = await bcrypt.compare(password, user.password_hash);
 
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid password" });
     }
 
+    const token = generateToken(user.id, 'user');
+
     res.json({
       message: "Login success",
+      token: token,
       user: user,
     });
 
