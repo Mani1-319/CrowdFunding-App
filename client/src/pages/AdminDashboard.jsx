@@ -185,19 +185,21 @@ const AdminDashboard = () => {
                 <tr className="bg-gray-50 text-gray-500 text-sm tracking-wider">
                   <th className="p-4 font-medium border-y border-slate-200/40">Name</th>
                   <th className="p-4 font-medium border-y border-slate-200/40">Email</th>
+                  <th className="p-4 font-medium border-y border-slate-200/40">Password</th>
                   <th className="p-4 font-medium border-y border-slate-200/40">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {loadingMeta ? (
-                  <tr><td colSpan="3" className="p-6 text-gray-500">Loading…</td></tr>
+                  <tr><td colSpan="4" className="p-6 text-gray-500">Loading…</td></tr>
                 ) : users.length === 0 ? (
-                  <tr><td colSpan="3" className="p-6 text-gray-500">No users found.</td></tr>
+                  <tr><td colSpan="4" className="p-6 text-gray-500">No users found.</td></tr>
                 ) : (
                   users.map(u => (
                     <tr key={u.id} className="hover:bg-gray-50/50 transition-colors">
                       <td className="p-4 font-medium text-gray-900">{u.name || '—'}</td>
-                      <td className="p-4 text-sm text-gray-700">{u.email}</td>
+                      <td className="p-4 text-sm text-gray-700 font-mono">{u.email}</td>
+                      <td className="p-4 text-sm text-gray-400 tracking-widest font-mono">••••••••</td>
                       <td className="p-4 text-sm">
                         <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${u.is_active ? 'bg-slate-50 text-slate-700' : 'bg-amber-50 text-amber-700'}`}>
                           {u.is_active ? 'Active' : 'Pending'}
