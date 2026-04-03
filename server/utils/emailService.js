@@ -1,4 +1,3 @@
-const fetch = require('node-fetch'); // or native fetch if Node 18+
 require('dotenv').config();
 
 const sendEmail = async (to, subject, html) => {
