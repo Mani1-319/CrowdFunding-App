@@ -89,6 +89,10 @@ const loginUser = async (req, res) => {
       return res.status(403).json({ message: "Your account has been suspended for violating platform policies." });
     }
 
+    if (!user.is_active) {
+      return res.status(403).json({ message: "Please verify your email address before logging in. If you lost your OTP, try registering again." });
+    }
+
     if (!user.password_hash) {
       return res.status(500).json({ message: "password_hash missing in DB" });
     }
