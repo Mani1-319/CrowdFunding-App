@@ -58,36 +58,66 @@ const Home = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Mock Campaign Cards - We'll replace this with real data later */}
-          {[1, 2, 3].map((i) => (
+          {[
+            {
+              id: 1,
+              title: "Help Rebuild the Community Center",
+              description: "Our local community center was heavily damaged in the recent storm. Help us rebuild a safe space for our youth.",
+              category: "Community",
+              raised: 250000,
+              goal: 500000,
+              image: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              id: 2,
+              title: "Tech Education for Underprivileged Kids",
+              description: "We are providing laptops and weekend coding bootcamps for 100 dedicated students from low-income families.",
+              category: "Education",
+              raised: 150000,
+              goal: 200000,
+              image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              id: 3,
+              title: "Support Eco-Friendly Urban Farming",
+              description: "Help us launch a sustainable urban farm addressing local food deserts while promoting green living.",
+              category: "Startup",
+              raised: 85000,
+              goal: 100000,
+              image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            }
+          ].map((camp) => (
             <motion.div 
-              key={i}
+              key={camp.id}
               whileHover={{ y: -5 }}
               className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-200/50 overflow-hidden group cursor-pointer shadow-slate-900/10"
             >
               <div className="h-48 bg-gray-200 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent z-10"></div>
-                {/* Fallback pattern */}
-                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                <img src={camp.image} alt={camp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent z-10 transition-opacity duration-300"></div>
                 <div className="absolute bottom-4 left-4 z-20">
-                  <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-medium border border-white/20">
-                    Medical
+                  <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-medium border border-white/20 shadow-sm">
+                    {camp.category}
                   </span>
                 </div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-slate-700 transition-colors">
-                  Support Jane's Medical Recovery
+                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-slate-700 transition-colors line-clamp-1">
+                  {camp.title}
                 </h3>
                 <p className="text-gray-500 text-sm mb-6 line-clamp-2">
-                  Jane recently had a severe accident and needs support for her extensive medical bills and physical therapy.
+                  {camp.description}
                 </p>
                 <div className="space-y-3">
                   <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-                    <div className="bg-gradient-to-r from-slate-600 to-blue-700 h-2 rounded-full w-3/4"></div>
+                    <div 
+                      className="bg-gradient-to-r from-slate-600 to-blue-700 h-2 rounded-full"
+                      style={{ width: `${Math.min((camp.raised / camp.goal) * 100, 100)}%` }}
+                    ></div>
                   </div>
                   <div className="flex justify-between text-sm font-medium">
-                    <span className="text-gray-900">{formatInrWhole(75000)} raised</span>
-                    <span className="text-gray-500">75% of {formatInrWhole(100000)}</span>
+                    <span className="text-gray-900">{formatInrWhole(camp.raised)} raised</span>
+                    <span className="text-gray-500">{Math.round((camp.raised / camp.goal) * 100)}% of {formatInrWhole(camp.goal)}</span>
                   </div>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../utils/api';
 
 const FAQS = [
   {
@@ -24,96 +25,7 @@ const FAQS = [
   }
 ];
 
-const STOP = new Set([
-  'the',
-  'a',
-  'an',
-  'is',
-  'are',
-  'was',
-  'how',
-  'do',
-  'does',
-  'did',
-  'can',
-  'could',
-  'would',
-  'should',
-  'i',
-  'my',
-  'me',
-  'we',
-  'you',
-  'your',
-  'to',
-  'for',
-  'of',
-  'and',
-  'or',
-  'on',
-  'it',
-  'its',
-  'if',
-  'what',
-  'when',
-  'where',
-  'why',
-  'who',
-  'be',
-  'this',
-  'that',
-  'there',
-  'about',
-  'with',
-  'from',
-  'into',
-  'at',
-  'in',
-  'as',
-  'by'
-]);
-
-function tokenize(text) {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s]/g, ' ')
-    .split(/\s+/)
-    .filter(Boolean)
-    .filter((t) => !STOP.has(t));
-}
-
-function matchFaqAnswer(userQuery) {
-  const trimmed = userQuery.trim();
-  if (!trimmed) return null;
-
-  const lower = trimmed.toLowerCase();
-  for (const faq of FAQS) {
-    if (faq.q.toLowerCase() === lower) return faq.a;
-  }
-
-  const qTokens = tokenize(trimmed);
-  if (qTokens.length === 0) return null;
-
-  let best = { score: 0, faq: null };
-  for (const faq of FAQS) {
-    const hay = `${faq.q} ${faq.a}`.toLowerCase();
-    let score = 0;
-    for (const t of qTokens) {
-      if (t.length < 2) continue;
-      if (hay.includes(t)) score += 2;
-    }
-    const qLower = faq.q.toLowerCase();
-    for (const t of qTokens) {
-      if (qLower.includes(t)) score += 1;
-    }
-    if (score > best.score) best = { score, faq };
-  }
-
-  if (best.faq && best.score >= 3) return best.faq.a;
-  if (best.faq && best.score >= 1) return best.faq.a;
-
-  return null;
-}
+// AI Chatbot logic is handled by the backend server.
 
 const SUGGESTED_CHIPS = [
   { label: 'Start a campaign', prompt: 'How do I start a campaign?' },
@@ -137,21 +49,35 @@ const Help = () => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const sendMessage = (text) => {
+  const sendMessage = async (text) => {
     const q = text.trim();
     if (!q) return;
-
-    const answer = matchFaqAnswer(q);
-    const fallback =
-      answer ??
-      "I don't have a specific answer for that in our Help Center yet. Try rephrasing, or browse the questions below. If you still need help, reach us on the Contact page.";
 
     setMessages((prev) => [
       ...prev,
       { role: 'user', text: q },
-      { role: 'assistant', text: fallback, showContactLink: !answer }
+      { role: 'assistant', text: 'Typing...', isLoading: true }
     ]);
     setInput('');
+
+    try {
+      const res = await api.post('/chat', { prompt: q });
+      setMessages((prev) => {
+        const newMsgs = [...prev];
+        newMsgs[newMsgs.length - 1] = { role: 'assistant', text: res.data.reply };
+        return newMsgs;
+      });
+    } catch (error) {
+      setMessages((prev) => {
+        const newMsgs = [...prev];
+        newMsgs[newMsgs.length - 1] = {
+          role: 'assistant',
+          text: "I am having trouble reaching the AI server right now. Please check out the FAQs below or try again later.",
+          showContactLink: true
+        };
+        return newMsgs;
+      });
+    }
   };
 
   const onSubmit = (e) => {
