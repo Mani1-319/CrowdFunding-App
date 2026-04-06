@@ -339,7 +339,12 @@ const CampaignDetail = () => {
                 <div className="text-sm font-semibold text-slate-700">{donations.length} total donations</div>
               </div>
 
-              {isCreator ? (
+              {campaign.raised_amount >= campaign.goal_amount ? (
+                <div className="bg-emerald-50 rounded-2xl p-6 border border-emerald-200 text-center">
+                  <h4 className="text-emerald-800 font-bold text-lg mb-2">Campaign successfully completed 🎉</h4>
+                  <p className="text-emerald-700 text-sm font-medium">Thank you to all the supporters who made this possible!</p>
+                </div>
+              ) : isCreator ? (
                 <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 text-center">
                   <h4 className="text-slate-800 font-bold mb-2">Creator View</h4>
                   <p className="text-slate-700 text-sm">You cannot donate to your own campaign. Share the URL with friends and family to gather support!</p>

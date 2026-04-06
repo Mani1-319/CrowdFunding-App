@@ -1,6 +1,7 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const db = require('../config/db');
+const { sendEmail } = require('../utils/emailService');
 
 const createOrder = async (req, res) => {
   const { amount, campaign_id } = req.body;
@@ -75,6 +76,38 @@ const verifyPayment = async (req, res) => {
         'UPDATE campaigns SET raised_amount = raised_amount + $1 WHERE id = $2 RETURNING *',
         [amt, cid]
       );
+
+      const campaign = updatedCampaign.rows[0];
+      const raised = parseFloat(campaign.raised_amount);
+      const goal = parseFloat(campaign.goal_amount);
+
+      // 3. Send email if goal just reached
+      if (raised >= goal && (raised - amt) < goal) {
+        try {
+          const userQuery = await db.query('SELECT email, name FROM users WHERE id = $1', [campaign.user_id]);
+          const creator = userQuery.rows[0];
+          
+          if (creator && creator.email) {
+            const subject = 'Campaign Successfully Completed! 🎉';
+            const html = `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+                <h2 style="color: #4f46e5;">Congratulations!</h2>
+                <p>Dear <strong>${creator.name}</strong>,</p>
+                <p>We are thrilled to inform you that your campaign <strong>"${campaign.title}"</strong> has successfully reached its goal amount of <strong>₹${goal}</strong>!</p>
+                <p>Your total raised amount is now <strong>₹${raised}</strong>.</p>
+                <p>This is a great achievement. We request you to create more campaigns and continue making a positive impact.</p>
+                <br>
+                <p>Best regards,</p>
+                <p><strong>The Donte Platform Team</strong></p>
+              </div>
+            `;
+            // Call without await so it doesn't block the payment verification response
+            sendEmail(creator.email, subject, html).catch(err => console.error('Failed to send goal completion email:', err));
+          }
+        } catch (emailErr) {
+          console.error('Error in sending goal completion email:', emailErr);
+        }
+      }
 
       const io = req.app.get('socketio');
       if (io) {
