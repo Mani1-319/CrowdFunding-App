@@ -14,6 +14,10 @@ const CampaignList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const [filterStatus, setFilterStatus] = useState('live');
+  const [filterCategory, setFilterCategory] = useState('All');
+  const categories = ['All', 'Medical', 'Education', 'Tech', 'Community', 'Startup', 'Other'];
+
   useEffect(() => {
     if (!user) {
       setLoading(false);
@@ -54,6 +58,19 @@ const CampaignList = () => {
     <div className="text-center py-20 text-red-500 font-medium">{error}</div>
   );
 
+  const filteredCampaigns = campaigns.filter(c => {
+    const isCompleted = parseFloat(c.raised_amount) >= parseFloat(c.goal_amount);
+    if (filterStatus === 'live' && isCompleted) return false;
+    if (filterStatus === 'completed' && !isCompleted) return false;
+
+    if (filterCategory !== 'All') {
+      const campCategory = c.category || 'Other';
+      if (campCategory !== filterCategory) return false;
+    }
+
+    return true;
+  });
+
   return (
     <div className="w-full">
       <div className="mb-10 text-center">
@@ -61,7 +78,40 @@ const CampaignList = () => {
         <p className="mt-4 text-xl text-gray-500">Find and support the causes you care about.</p>
       </div>
 
-      {campaigns.length === 0 ? (
+      <div className="mb-8 flex flex-col gap-6">
+        {/* Status Tabs */}
+        <div className="flex justify-center">
+          <div className="inline-flex bg-slate-100 p-1.5 rounded-full">
+            <button
+              onClick={() => setFilterStatus('live')}
+              className={`px-8 py-2.5 rounded-full font-bold transition-all text-sm ${filterStatus === 'live' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              Live Campaigns
+            </button>
+            <button
+              onClick={() => setFilterStatus('completed')}
+              className={`px-8 py-2.5 rounded-full font-bold transition-all text-sm ${filterStatus === 'completed' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              Completed 🎉
+            </button>
+          </div>
+        </div>
+
+        {/* Category Pills */}
+        <div className="flex flex-wrap justify-center gap-3">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setFilterCategory(cat)}
+              className={`px-5 py-2 rounded-full border text-sm font-semibold transition-colors ${filterCategory === cat ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400'}`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {filteredCampaigns.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-3xl border border-slate-200/50 shadow-sm">
           <p className="text-gray-500 text-lg mb-4">No campaigns found.</p>
           <Link to="/create-campaign" className="text-slate-700 font-medium hover:text-slate-900">
@@ -70,7 +120,7 @@ const CampaignList = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {campaigns.map((campaign, index) => {
+          {filteredCampaigns.map((campaign, index) => {
             const progress = Math.min((campaign.raised_amount / campaign.goal_amount) * 100, 100).toFixed(1);
             
             return (

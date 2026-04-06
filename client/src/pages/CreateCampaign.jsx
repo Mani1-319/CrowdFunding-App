@@ -12,7 +12,8 @@ const CreateCampaign = () => {
     title: '',
     description: '',
     goal_amount: '',
-    deadline: ''
+    deadline: '',
+    category: 'Other'
   });
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -44,6 +45,7 @@ const CreateCampaign = () => {
       data.append('description', formData.description);
       data.append('goal_amount', formData.goal_amount);
       data.append('deadline', formData.deadline);
+      data.append('category', formData.category);
       
       if (images && images.length > 0) {
         images.forEach((file) => {
@@ -84,6 +86,23 @@ const CreateCampaign = () => {
               value={formData.title}
               onChange={(e) => setFormData({...formData, title: e.target.value})}
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <select
+              required
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-slate-500 focus:border-slate-600 transition-all bg-gray-50 focus:bg-white"
+              value={formData.category}
+              onChange={(e) => setFormData({...formData, category: e.target.value})}
+            >
+              <option value="Other">Other</option>
+              <option value="Medical">Medical</option>
+              <option value="Education">Education</option>
+              <option value="Tech">Tech</option>
+              <option value="Community">Community</option>
+              <option value="Startup">Startup</option>
+            </select>
           </div>
 
           <div>

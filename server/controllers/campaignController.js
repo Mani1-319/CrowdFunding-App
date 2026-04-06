@@ -2,7 +2,7 @@ const db = require('../config/db');
 const { sendEmail } = require('../utils/emailService');
 
 const createCampaign = async (req, res) => {
-  const { title, description, goal_amount, deadline } = req.body;
+  const { title, description, goal_amount, deadline, category } = req.body;
   const user_id = req.user.id;
   
   const image_url = req.files && req.files.length > 0 
@@ -11,8 +11,8 @@ const createCampaign = async (req, res) => {
 
   try {
     const newCampaign = await db.query(
-      'INSERT INTO campaigns (user_id, title, description, goal_amount, deadline, image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [user_id, title, description, goal_amount, deadline, image_url]
+      'INSERT INTO campaigns (user_id, title, description, goal_amount, deadline, image_url, category) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [user_id, title, description, goal_amount, deadline, image_url, category || 'Other']
     );
 
     res.status(201).json(newCampaign.rows[0]);

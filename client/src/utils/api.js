@@ -1,7 +1,8 @@
 import axios from "axios";
+import { getApiBaseUrl } from "./env";
 
 const api = axios.create({
-  baseURL: "https://crowdfunding-app-0onj.onrender.com/api",
+  baseURL: getApiBaseUrl() || "http://localhost:5000/api",
   headers: {
     "Content-Type": "application/json",
   },
