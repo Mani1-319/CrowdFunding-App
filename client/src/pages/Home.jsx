@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-white/75 backdrop-blur-sm py-20 lg:py-32 rounded-3xl shadow-sm border border-slate-200/50 shadow-slate-900/10">
+      <section className="relative overflow-hidden bg-white/75 dark:bg-slate-900/75 backdrop-blur-sm py-20 lg:py-32 rounded-3xl shadow-sm border border-slate-200/50 dark:border-slate-800 shadow-slate-900/10 dark:shadow-black/30">
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-gradient-to-br from-slate-100 to-blue-100 opacity-50 blur-3xl mix-blend-multiply"></div>
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-gradient-to-tr from-indigo-100 to-slate-100 opacity-50 blur-3xl mix-blend-multiply"></div>
         
@@ -16,7 +16,7 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900 mb-6"
+            className="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-6"
           >
             Fund the <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-700 to-blue-800">Future</span> You Believe In
           </motion.h1>
@@ -24,7 +24,7 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mt-4 max-w-2xl mx-auto text-xl text-gray-500 mb-10"
+            className="mt-4 max-w-2xl mx-auto text-xl text-gray-500 dark:text-slate-400 mb-10"
           >
             Join thousands of passionate individuals making a real difference. Start your campaign today or support causes that matter to you.
           </motion.p>
@@ -34,10 +34,10 @@ const Home = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Link to="/create-campaign" className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-full shadow-lg text-white bg-slate-700 hover:bg-slate-800 transition-all hover:scale-105 active:scale-95">
+            <Link to="/create-campaign" className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-full shadow-lg text-white dark:text-slate-900 bg-slate-800 dark:bg-white hover:bg-slate-900 dark:hover:bg-slate-200 transition-all hover:scale-105 active:scale-95">
               Start a Campaign
             </Link>
-            <Link to="/campaigns" className="inline-flex items-center justify-center px-8 py-4 border border-gray-200 text-lg font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 transition-all hover:shadow-md active:scale-95">
+            <Link to="/campaigns" className="inline-flex items-center justify-center px-8 py-4 border border-gray-200 dark:border-slate-700 text-lg font-medium rounded-full text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-900 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all hover:shadow-md active:scale-95">
               Explore Campaigns
             </Link>
           </motion.div>
@@ -48,8 +48,8 @@ const Home = () => {
       <section className="mt-20">
         <div className="flex justify-between items-end mb-10">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Trending Campaigns</h2>
-            <p className="mt-2 text-gray-500">Discover causes that people are supporting right now.</p>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Trending Campaigns</h2>
+            <p className="mt-2 text-gray-500 dark:text-slate-400">Discover causes that people are supporting right now.</p>
           </div>
           <Link to="/campaigns" className="text-slate-700 font-medium hover:text-slate-900 transition-colors hidden sm:block">
             View all &rarr;
@@ -90,7 +90,7 @@ const Home = () => {
             <motion.div 
               key={camp.id}
               whileHover={{ y: -5 }}
-              className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-200/50 overflow-hidden group cursor-pointer shadow-slate-900/10"
+              className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-200/50 dark:border-slate-800 overflow-hidden group cursor-pointer shadow-slate-900/10 dark:shadow-black/30"
             >
               <div className="h-48 bg-gray-200 relative overflow-hidden">
                 <img src={camp.image} alt={camp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -102,22 +102,22 @@ const Home = () => {
                 </div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-slate-700 transition-colors line-clamp-1">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors line-clamp-1">
                   {camp.title}
                 </h3>
-                <p className="text-gray-500 text-sm mb-6 line-clamp-2">
+                <p className="text-gray-500 dark:text-slate-400 text-sm mb-6 line-clamp-2">
                   {camp.description}
                 </p>
                 <div className="space-y-3">
-                  <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                  <div className="w-full bg-gray-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
                     <div 
                       className="bg-gradient-to-r from-slate-600 to-blue-700 h-2 rounded-full"
                       style={{ width: `${Math.min((camp.raised / camp.goal) * 100, 100)}%` }}
                     ></div>
                   </div>
                   <div className="flex justify-between text-sm font-medium">
-                    <span className="text-gray-900">{formatInrWhole(camp.raised)} raised</span>
-                    <span className="text-gray-500">{Math.round((camp.raised / camp.goal) * 100)}% of {formatInrWhole(camp.goal)}</span>
+                    <span className="text-gray-900 dark:text-white">{formatInrWhole(camp.raised)} raised</span>
+                    <span className="text-gray-500 dark:text-slate-400">{Math.round((camp.raised / camp.goal) * 100)}% of {formatInrWhole(camp.goal)}</span>
                   </div>
                 </div>
               </div>

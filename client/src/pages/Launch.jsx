@@ -72,14 +72,16 @@ const Launch = () => {
           }}
         >
           <motion.div
-            className="mb-6 h-20 w-20 rounded-2xl bg-gradient-to-br from-slate-500 via-blue-700 to-indigo-900 p-[2px] shadow-2xl shadow-blue-900/35"
-            initial={{ scale: 0.75, rotate: -8 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ delay: 0.12, type: 'spring', stiffness: 220, damping: 20 }}
+            className="mb-6 h-32 w-32 relative z-10"
+            initial={{ scale: 0.85, y: 10, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            transition={{ delay: 0.15, duration: 0.8, ease: "easeOut" }}
           >
-            <div className="flex h-full w-full items-center justify-center rounded-[14px] bg-slate-950/90">
-              <span className="text-4xl font-black tracking-tighter text-white">D</span>
-            </div>
+            <img 
+              src="/launch_hands.png" 
+              alt="Donte Launch Logo" 
+              className="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(59,130,246,0.3)]" 
+            />
           </motion.div>
 
           <h1 className="text-5xl font-black tracking-tight text-white sm:text-7xl md:text-8xl">
