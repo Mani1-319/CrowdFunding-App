@@ -5,13 +5,31 @@ import toast from 'react-hot-toast';
 
 const Register = () => {
   const [registerMode, setRegisterMode] = useState('email');
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
-  const [phoneData, setPhoneData] = useState({ name: '', phone: '', password: '' });
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    dob: '',
+    password: '',
+    acceptedPrivacy: false,
+    isAdult: false,
+  });
+  const [phoneData, setPhoneData] = useState({
+    name: '',
+    phone: '',
+    address: '',
+    dob: '',
+    password: '',
+    acceptedPrivacy: false,
+    isAdult: false,
+  });
   const [loading, setLoading] = useState(false);
   const [otpStep, setOtpStep] = useState(false);
   const [otp, setOtp] = useState('');
   const [resendCooldown, setResendCooldown] = useState(0);
   const navigate = useNavigate();
+  const minAdultDate = new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0];
 
   const canResend = useMemo(() => resendCooldown === 0 && !loading, [resendCooldown, loading]);
 
@@ -188,6 +206,40 @@ const Register = () => {
                 />
               </div>
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Phone number</label>
+                <input
+                  type="tel"
+                  required
+                  inputMode="tel"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-slate-500 focus:border-slate-600 transition-all bg-gray-50 focus:bg-white"
+                  placeholder="+91 9876543210"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                <textarea
+                  required
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-slate-500 focus:border-slate-600 transition-all bg-gray-50 focus:bg-white resize-none"
+                  placeholder="Enter your current address"
+                  value={formData.address}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date of birth</label>
+                <input
+                  type="date"
+                  required
+                  max={minAdultDate}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-slate-500 focus:border-slate-600 transition-all bg-gray-50 focus:bg-white"
+                  value={formData.dob}
+                  onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                />
+              </div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                 <input
                   type="password"
@@ -197,6 +249,28 @@ const Register = () => {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 />
+              </div>
+              <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+                <label className="flex items-start gap-3 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    required
+                    checked={formData.acceptedPrivacy}
+                    onChange={(e) => setFormData({ ...formData, acceptedPrivacy: e.target.checked })}
+                    className="mt-1 h-4 w-4 rounded border-gray-300 text-slate-700 focus:ring-slate-500"
+                  />
+                  <span>I agree to the privacy policy and consent to secure account verification.</span>
+                </label>
+                <label className="flex items-start gap-3 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    required
+                    checked={formData.isAdult}
+                    onChange={(e) => setFormData({ ...formData, isAdult: e.target.checked })}
+                    className="mt-1 h-4 w-4 rounded border-gray-300 text-slate-700 focus:ring-slate-500"
+                  />
+                  <span>I confirm that I am 18 years of age or older.</span>
+                </label>
               </div>
               <button
                 type="submit"
@@ -239,6 +313,28 @@ const Register = () => {
                 />
               </div>
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                <textarea
+                  required
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white resize-none"
+                  placeholder="Enter your current address"
+                  value={phoneData.address}
+                  onChange={(e) => setPhoneData({ ...phoneData, address: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date of birth</label>
+                <input
+                  type="date"
+                  required
+                  max={minAdultDate}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white"
+                  value={phoneData.dob}
+                  onChange={(e) => setPhoneData({ ...phoneData, dob: e.target.value })}
+                />
+              </div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                 <input
                   type="password"
@@ -247,6 +343,28 @@ const Register = () => {
                   value={phoneData.password}
                   onChange={(e) => setPhoneData({ ...phoneData, password: e.target.value })}
                 />
+              </div>
+              <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+                <label className="flex items-start gap-3 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    required
+                    checked={phoneData.acceptedPrivacy}
+                    onChange={(e) => setPhoneData({ ...phoneData, acceptedPrivacy: e.target.checked })}
+                    className="mt-1 h-4 w-4 rounded border-gray-300 text-slate-700 focus:ring-slate-500"
+                  />
+                  <span>I agree to the privacy policy and consent to secure account verification.</span>
+                </label>
+                <label className="flex items-start gap-3 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    required
+                    checked={phoneData.isAdult}
+                    onChange={(e) => setPhoneData({ ...phoneData, isAdult: e.target.checked })}
+                    className="mt-1 h-4 w-4 rounded border-gray-300 text-slate-700 focus:ring-slate-500"
+                  />
+                  <span>I confirm that I am 18 years of age or older.</span>
+                </label>
               </div>
               <button
                 type="submit"

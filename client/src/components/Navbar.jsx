@@ -20,8 +20,15 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex-shrink-0 flex items-center">
-            <Link to={user ? "/welcome" : "/home"} className="flex items-center gap-2">
-              <img src="/logo.png" alt="Donte Logo" className="w-10 h-10 object-cover rounded-xl shadow-lg shadow-slate-400/40 dark:shadow-black/50" />
+            <Link to={user ? "/welcome" : "/home"} className="group flex items-center gap-3">
+              <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 dark:bg-white/5 ring-1 ring-slate-200/40 dark:ring-slate-700/40 backdrop-blur-md overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-slate-200/20 dark:from-white/10 dark:to-slate-700/20" />
+                <img
+                  src="/logo.png"
+                  alt="Donte Logo"
+                  className="relative w-9 h-9 object-contain opacity-95 mix-blend-multiply dark:mix-blend-screen saturate-110 transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
               <span className="font-extrabold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-slate-300 tracking-tight">
                 Donte
               </span>

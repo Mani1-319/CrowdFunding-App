@@ -12,6 +12,31 @@ const Home = () => {
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-gradient-to-tr from-emerald-100 to-slate-100 opacity-50 blur-3xl mix-blend-multiply"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-8 flex justify-center"
+          >
+            <div className="group relative inline-flex items-center gap-4 rounded-full border border-white/30 dark:border-slate-700/50 bg-white/35 dark:bg-slate-900/35 px-5 py-3 backdrop-blur-xl shadow-lg shadow-slate-200/40 dark:shadow-black/30">
+              <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-transparent overflow-hidden">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/45 via-transparent to-slate-200/20 dark:from-white/10 dark:to-slate-700/20" />
+                <img
+                  src="/logo.png"
+                  alt="Donte Logo"
+                  className="relative h-12 w-12 object-contain mix-blend-multiply dark:mix-blend-screen opacity-95 saturate-110 transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">
+                  Donte
+                </p>
+                <p className="text-sm text-slate-600 dark:text-slate-300">
+                  Community-powered fundraising
+                </p>
+              </div>
+            </div>
+          </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
