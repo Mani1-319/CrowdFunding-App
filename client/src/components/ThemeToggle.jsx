@@ -24,7 +24,7 @@ const ThemeToggle = () => {
     <button
       onClick={toggleTheme}
       className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 ${
-        theme === 'dark' ? 'bg-indigo-900 border border-indigo-700/50' : 'bg-slate-200 border border-slate-300'
+        theme === 'dark' ? 'bg-emerald-900 border border-emerald-700/50' : 'bg-slate-200 border border-slate-300'
       }`}
       aria-label="Toggle Dark Mode"
     >
@@ -38,7 +38,7 @@ const ThemeToggle = () => {
         className="inline-flex h-6 w-6 transform items-center justify-center rounded-full bg-white shadow-sm ring-0 transition-transform"
       >
         {theme === 'dark' ? (
-          <svg className="h-3.5 w-3.5 text-indigo-800" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="h-3.5 w-3.5 text-emerald-800" fill="currentColor" viewBox="0 0 20 20">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
           </svg>
         ) : (

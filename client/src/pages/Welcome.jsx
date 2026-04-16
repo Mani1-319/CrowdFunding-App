@@ -17,7 +17,7 @@ const Welcome = () => {
         
         {/* Campaigner Path */}
         <Link to="/create-campaign" className="bg-white/85 backdrop-blur-sm rounded-3xl p-10 border-2 border-blue-100/40 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all group flex flex-col items-center text-center cursor-pointer">
-          <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-blue-200/60 transition-all duration-300">
+          <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-emerald-100 text-blue-800 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-blue-200/60 transition-all duration-300">
             <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
           </div>
           <h2 className="text-2xl font-extrabold text-gray-900 mb-3 group-hover:text-blue-900 transition-colors">Start a Campaign</h2>

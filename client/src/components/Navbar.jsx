@@ -35,7 +35,7 @@ const Navbar = () => {
             <Link to="/help" className="text-gray-600 dark:text-slate-300 hover:text-slate-700 dark:hover:text-white px-2 py-2 text-sm font-medium transition-colors">Help</Link>
             <Link to="/contact" className="text-gray-600 dark:text-slate-300 hover:text-slate-700 dark:hover:text-white px-2 py-2 text-sm font-medium transition-colors">Contact</Link>
             {user && user.role === 'admin' && (
-               <Link to="/admin" className="text-indigo-700 dark:text-indigo-400 border-l border-gray-200 dark:border-slate-700 pl-4 hover:text-indigo-900 dark:hover:text-indigo-300 py-2 text-sm font-medium transition-colors">Admin Dashboard</Link>
+               <Link to="/admin" className="text-emerald-700 dark:text-emerald-400 border-l border-gray-200 dark:border-slate-700 pl-4 hover:text-emerald-900 dark:hover:text-emerald-300 py-2 text-sm font-medium transition-colors">Admin Dashboard</Link>
             )}
           </div>
 
@@ -106,7 +106,7 @@ const Navbar = () => {
             <Link to="/help" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800">Help</Link>
             <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800">Contact</Link>
             {user && user.role === 'admin' && (
-              <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-base font-medium text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30">Admin Dashboard</Link>
+              <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-base font-medium text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30">Admin Dashboard</Link>
             )}
           </div>
           

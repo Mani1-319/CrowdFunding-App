@@ -9,7 +9,7 @@ const Home = () => {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-white/75 dark:bg-slate-900/75 backdrop-blur-sm py-20 lg:py-32 rounded-3xl shadow-sm border border-slate-200/50 dark:border-slate-800 shadow-slate-900/10 dark:shadow-black/30">
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-gradient-to-br from-slate-100 to-blue-100 opacity-50 blur-3xl mix-blend-multiply"></div>
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-gradient-to-tr from-indigo-100 to-slate-100 opacity-50 blur-3xl mix-blend-multiply"></div>
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-gradient-to-tr from-emerald-100 to-slate-100 opacity-50 blur-3xl mix-blend-multiply"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
           <motion.h1 

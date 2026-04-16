@@ -15,7 +15,7 @@ const AdminLayout = () => {
       <header className="sticky top-0 z-50 w-full backdrop-blur-lg bg-white/85 border-b border-slate-200/50 shadow-sm shadow-slate-900/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <Link to="/admin" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 via-blue-800 to-indigo-950 flex items-center justify-center text-white shadow-lg shadow-slate-400/35">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 via-blue-800 to-emerald-950 flex items-center justify-center text-white shadow-lg shadow-slate-400/35">
               <span className="font-extrabold text-lg tracking-tight">A</span>
             </div>
             <div className="leading-tight">
