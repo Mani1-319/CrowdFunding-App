@@ -12,12 +12,12 @@ const { sendEmail } = require('../utils/emailService');
 // ================= REGISTER =================
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, phone, address, dob, acceptedPrivacy, isAdult } = req.body;
 
     console.log("REGISTER BODY:", req.body);
 
     if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields required" });
+      return res.status(400).json({ message: "Name, email and password required" });
     }
 
     const check = await db.query("SELECT * FROM users WHERE email=$1", [email]);
@@ -34,13 +34,13 @@ const registerUser = async (req, res) => {
       }
       // UPDATE unverified user
       await db.query(
-        "UPDATE users SET name=$1, password_hash=$2, otp=$3, otp_expires_at=$4 WHERE email=$5",
-        [name, password_hash, otp, otp_expires_at, email]
+        "UPDATE users SET name=$1, password_hash=$2, otp=$3, otp_expires_at=$4, phone=$5, address=$6, dob=$7, accepted_privacy=$8, is_adult=$9 WHERE email=$10",
+        [name, password_hash, otp, otp_expires_at, phone, address, dob, acceptedPrivacy, isAdult, email]
       );
     } else {
       await db.query(
-        "INSERT INTO users (name, email, password_hash, is_active, otp, otp_expires_at) VALUES ($1,$2,$3,false,$4,$5)",
-        [name, email, password_hash, otp, otp_expires_at]
+        "INSERT INTO users (name, email, password_hash, is_active, otp, otp_expires_at, phone, address, dob, accepted_privacy, is_adult) VALUES ($1,$2,$3,false,$4,$5,$6,$7,$8,$9,$10)",
+        [name, email, password_hash, otp, otp_expires_at, phone, address, dob, acceptedPrivacy, isAdult]
       );
     }
 

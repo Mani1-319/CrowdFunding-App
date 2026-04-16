@@ -14,7 +14,11 @@ CREATE TABLE IF NOT EXISTS users (
   reset_password_expires_at TIMESTAMP,
   phone_otp VARCHAR(6),
   phone_otp_expires_at TIMESTAMP,
-  phone_verified BOOLEAN DEFAULT false
+  phone_verified BOOLEAN DEFAULT false,
+  address TEXT,
+  dob DATE,
+  accepted_privacy BOOLEAN DEFAULT false,
+  is_adult BOOLEAN DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS admins (

@@ -40,9 +40,6 @@ const AdminLogin = () => {
           </div>
           <h2 className="text-3xl font-extrabold text-gray-900">Admin Portal</h2>
           <p className="mt-2 text-sm text-gray-500">Platform management access</p>
-          <p className="mt-3 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2">
-            Admin email: manisrinath@donte.com
-          </p>
         </div>
         
         <form className="space-y-6" onSubmit={handleAdminLogin}>
@@ -52,7 +49,7 @@ const AdminLogin = () => {
               type="email"
               required
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-slate-500 focus:border-slate-600 transition-all text-gray-900"
-              placeholder="manisrinath@donte.com"
+              placeholder="Enter admin email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />

@@ -19,14 +19,11 @@ const Home = () => {
             className="mb-8 flex justify-center"
           >
             <div className="group relative inline-flex items-center gap-4 rounded-full border border-white/30 dark:border-slate-700/50 bg-white/35 dark:bg-slate-900/35 px-5 py-3 backdrop-blur-xl shadow-lg shadow-slate-200/40 dark:shadow-black/30">
-              <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-transparent overflow-hidden">
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/45 via-transparent to-slate-200/20 dark:from-white/10 dark:to-slate-700/20" />
-                <img
-                  src="/logo.png"
-                  alt="Donte Logo"
-                  className="relative h-12 w-12 object-contain mix-blend-multiply dark:mix-blend-screen opacity-95 saturate-110 transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
+              <img
+                src="/logo.png"
+                alt="Donte Logo"
+                className="h-12 w-12 object-contain mix-blend-multiply dark:mix-blend-screen opacity-95 saturate-110 transition-transform duration-300 group-hover:scale-105"
+              />
               <div className="text-left">
                 <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">
                   Donte
